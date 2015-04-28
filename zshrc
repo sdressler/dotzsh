@@ -23,7 +23,7 @@ export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 source ~/.rvm/scripts/rvm
 source /etc/profile.d/swarmtools.sh
 
-eval `dircolors /home/sebastian/.config/colors/dircolors-solarized/dircolors.ansi-light`
+eval `dircolors ~/.zsh/dircolors-solarized/dircolors.ansi-light`
 
 setopt hist_ignore_dups share_history inc_append_history extended_history
 setopt AUTO_CD
