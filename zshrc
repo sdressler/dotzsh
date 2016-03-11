@@ -1,39 +1,53 @@
-# The following lines were added by compinstall
 
-zstyle ':completion:*' completer _expand _complete _ignored _approximate
-zstyle ':completion:*' max-errors 2
-zstyle :compinstall filename '/home/sebastian/.zshrc'
+# Autostart TMUX
+ZSH_TMUX_AUTOSTART=true
 
-autoload -Uz compinit
-compinit
-# End of lines added by compinstall
-# Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
-HISTSIZE=10000
-SAVEHIST=10000
-bindkey -e
-# End of lines configured by zsh-newuser-install
-#
+# PROMPT SETTINGS
+DEFAULT_USER="sebastian" #@Sebastians-MacBook-Pro"
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context time dir)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(background_jobs vcs)
 
-. /usr/share/powerline/zsh/powerline.zsh
+export JIRA_URL=http://jira.swarm64.com
 
+# DOCKER
+eval "$(docker-machine env dev)"
 
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+source ~/.antigen.zsh
 
-source ~/.rvm/scripts/rvm
-source /etc/profile.d/swarmtools.sh
+# Load the oh-my-zsh's library.
+antigen use oh-my-zsh
 
-eval `dircolors ~/.zsh/dircolors-solarized/dircolors.ansi-light`
+antigen bundle git
+antigen bundle brew
+antigen bundle docker
+antigen bundle jira
+antigen bundle sudo
+antigen bundle tmux
+antigen bundle encode64
 
-setopt hist_ignore_dups share_history inc_append_history extended_history
-setopt AUTO_CD
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-autosuggestions
 
-alias 'vi=vim'
+# Load the theme.
+#antigen theme bira
+antigen theme bhilburn/powerlevel9k powerlevel9k
 
-source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
+antigen apply
 
-# bind UP and DOWN arrow keys (compatibility fallback
-# for Ubuntu 12.04, Fedora 21, and MacOSX 10.9 users)
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
+# Aliases
+alias docker-run='docker run --rm -v `pwd`:/tmp/work -w /tmp/work'
+alias docker-run-hw='docker-run -e VM_NO_LOADS=1 swarm64-dev-hw'
+alias vi='vim'
+alias docker-display='socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"'
+
+# Set tmux pane name when SSH'ing
+ssh() {
+    if [ "$(ps -p $(ps -p $$ -o ppid=) -o comm=)" = "tmux" ]; then
+        tmux rename-window "$(echo $* | cut -d . -f 1)"
+        command ssh "$@"
+        tmux set-window-option automatic-rename "on" 1>/dev/null
+    else
+        command ssh "$@"
+    fi
+}
+
