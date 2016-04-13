@@ -7,6 +7,10 @@ DEFAULT_USER="sebastian" #@Sebastians-MacBook-Pro"
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context time dir)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(background_jobs vcs)
 
+export LC_ALL=en_US.UTF-8 
+export LANG=en_US.UTF-8
+
+export PATH=$HOME/Library/Python/2.7/bin:$PATH
 export JIRA_URL=http://jira.swarm64.com
 
 # DOCKER
@@ -50,4 +54,6 @@ ssh() {
         command ssh "$@"
     fi
 }
+
+powerline-config tmux setup
 
