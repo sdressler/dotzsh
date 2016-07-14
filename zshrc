@@ -10,11 +10,15 @@ POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(background_jobs vcs)
 export LC_ALL=en_US.UTF-8 
 export LANG=en_US.UTF-8
 
-export PATH=$HOME/Library/Python/2.7/bin:$PATH
 export JIRA_URL=http://jira.swarm64.com
 
+#export PYENV_ROOT=/usr/local/var/pyenv
+#export PATH=$PYENV_ROOT/bin:$PATH
+#eval "$(pyenv init -)"
+
 # DOCKER
-eval "$(docker-machine env dev)"
+#eval "$(docker-machine env dev)"
+#eval "$(dinghy env)"
 
 source ~/.zsh/antigen/antigen.zsh
 
@@ -39,8 +43,8 @@ antigen theme bhilburn/powerlevel9k powerlevel9k
 antigen apply
 
 # Aliases
-alias docker-run='docker run --rm -v `pwd`:/tmp/work -w /tmp/work'
-alias docker-run-hw='docker-run -e VM_NO_LOADS=1 swarm64-dev-hw'
+alias docker-run='docker run --rm -i -t -v `pwd`:/tmp/work -w /tmp/work'
+alias docker-run-hw='docker-run -e VM_NO_LOADS=1 dev'
 alias vi='vim'
 alias docker-display='socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"'
 
@@ -55,5 +59,7 @@ ssh() {
     fi
 }
 
-powerline-config tmux setup
+# powerline-config tmux setup
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
